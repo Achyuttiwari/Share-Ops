@@ -40,7 +40,9 @@ public class FileChooser extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 String path = data.getStringExtra("path");
                 filePath.setText(path);
-                Log.e("data",path);
+                Log.e("data", path);
+            } else {
+                Log.e("data", "cancel");
+            }
         }
     }
-}
