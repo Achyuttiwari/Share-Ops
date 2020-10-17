@@ -78,6 +78,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat {
         Intent i = new Intent(this, FileChooser.class);
         startActivity(i);
     }
+    public void onReceiver(View view){
+        Intent i = new Intent(this, MainActivity_receiver.class);
+        startActivity(i);
+    }
         }
 }
 }
