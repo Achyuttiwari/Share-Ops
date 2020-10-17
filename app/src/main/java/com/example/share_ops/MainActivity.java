@@ -21,20 +21,24 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        onPermission();
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        if(requestCode == PERMISSION_REQUEST_INTERNET) {
-            if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this,"Internet_permission_granted",Toast.LENGTH_SHORT).show();
+        if (requestCode == PERMISSION_REQUEST_INTERNET) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Internet_permission_granted", Toast.LENGTH_SHORT).show();
             } else {
                 // Permission request was denied.
-                Toast.makeText(this,"Internet_permission_denied",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Internet_permission_denied", Toast.LENGTH_SHORT).show();
             }
-            }
-
         }
+
+    }
+
+    public void onPermission() {
+
     }
 }
