@@ -142,5 +142,51 @@ public class MainActivity_sender extends AppCompatActivity{
         return bitmap;
     }
 
+    class ServerThread implements Runnable{
+
+        public void run(){
+            try {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        listenText.setText("Listening on port : "+IP+":"+SERVERPORT);
+                    }
+                });
+
+                serverSocket = new ServerSocket(SERVERPORT);
+
+                while (true) {
+                    // LISTEN FOR INCOMING CLIENTS
+                    Socket client = serverSocket.accept();
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            serverStatus.setText("Connected...");
+                        }
+                    });
+
+                    File myFile = new File (filePath);
+                    byte [] mybytearray  = new byte [(int)myFile.length()];
+                    FileInputStream fis = new FileInputStream(myFile);
+                    BufferedInputStream bis = new BufferedInputStream(fis);
+                    bis.read(mybytearray,0,mybytearray.length);
+                    OutputStream os = client.getOutputStream();
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Toast.makeText(MainActivity_sender.this,"Sending....",Toast.LENGTH_LONG).show();
+                            serverStatus.setText("sending File ...");
+                        }
+                    });
+                    os.write(mybytearray,0,mybytearray.length);
+                    os.flush();
+                    client.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
 
 }
