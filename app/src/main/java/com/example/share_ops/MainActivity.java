@@ -63,6 +63,15 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat {
                             PERMISSION_REQUEST_INTERNET);
                 }
             }).show();
+        } else {
+            Snackbar.make(mLayout,
+                    "Permission is not available. Requesting camera permission.",
+                    Snackbar.LENGTH_SHORT).show();
+            // Request the permission. The result will be received in onRequestPermissionResult().
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET},
+                    PERMISSION_REQUEST_INTERNET);
+        }
+    }
         }
 }
 }
