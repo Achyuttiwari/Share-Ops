@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat {
             requestInternetPermission();
         }
     }
+    private void requestInternetPermission() {
+        {
 
+        }
 }
 }
