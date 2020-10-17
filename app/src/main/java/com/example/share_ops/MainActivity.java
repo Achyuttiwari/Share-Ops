@@ -11,7 +11,7 @@ import androidx.core.app.ActivityCompat;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat {
 
-
+        int PERMISSION_REQUEST_INTERNET = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
