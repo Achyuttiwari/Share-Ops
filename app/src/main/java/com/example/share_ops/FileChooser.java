@@ -1,5 +1,6 @@
 package com.example.share_ops;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,6 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class FileChooser extends AppCompatActivity {
     TextView filePath;
@@ -48,6 +51,13 @@ public class FileChooser extends AppCompatActivity {
     }
 
     public void permissionFile() {
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        } else {
+            Toast.makeText(this,"permission already granted",Toast.LENGTH_SHORT).show();
+        }
+
 
     }
 }
