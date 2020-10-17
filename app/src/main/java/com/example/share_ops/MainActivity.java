@@ -2,12 +2,14 @@ package com.example.share_ops;
 
 import android.os.Bundle;
 
-import androidx.navigation.ui.AppBarConfiguration;
+
+
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActivityCompat {
 
 
 
