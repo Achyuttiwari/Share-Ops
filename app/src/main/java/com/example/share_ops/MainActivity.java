@@ -1,6 +1,7 @@
 package com.example.share_ops;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -71,6 +72,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET},
                     PERMISSION_REQUEST_INTERNET);
         }
+    }
+    public void onSender(View view){
+
+        Intent i = new Intent(this, FileChooser.class);
+        startActivity(i);
     }
         }
 }
