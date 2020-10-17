@@ -60,4 +60,17 @@ public class MainActivity_sender extends AppCompatActivity{
         handler = new Handler();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted.
+                //Toast.makeText(this,"permission WIFI_ACCESS",Toast.LENGTH_SHORT).show();
+                IP = IPgen();
+                Toast.makeText(this,IP,Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
 }
