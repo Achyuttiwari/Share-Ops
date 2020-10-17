@@ -46,3 +46,8 @@ public class FileChooser extends AppCompatActivity {
             }
         }
     }
+
+    public void permissionFile() {
+
+    }
+}
