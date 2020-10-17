@@ -29,4 +29,35 @@ public class MainActivity_sender extends AppCompatActivity{
     int SERVERPORT = 2935;
     Handler handler;
 
+    public final static int QRcodeWidth = 500 ;
+    int PERMISSION_REQUEST_CODE = 1;
+    Bitmap bitmap ;
+
+    TextView listenText;
+    TextView serverStatus;
+    ImageView img_QR;
+
+    String filePath;
+    String IP;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main_sender);
+
+        Intent fileIntent = getIntent();
+        filePath = fileIntent.getStringExtra("path");
+
+        Toast.makeText(this,filePath,Toast.LENGTH_SHORT).show();
+
+        img_QR = (ImageView)findViewById(R.id.imageView_QR);
+
+        listenText = (TextView)findViewById(R.id.text_listen);
+        listenText.setText("Not Listening");
+        serverStatus = (TextView)findViewById(R.id.text_serverStatus);
+        serverStatus.setText("Disconnected");
+
+        handler = new Handler();
+    }
+
 }
