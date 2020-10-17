@@ -1,5 +1,6 @@
 package com.example.share_ops;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 
@@ -24,5 +25,11 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
+        if(requestCode == PERMISSION_REQUEST_INTERNET) {
+            if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            }
+
+        }
     }
 }
