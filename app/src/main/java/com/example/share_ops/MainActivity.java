@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat {
     public void onPermission() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET)
                 == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this,"Internet_Permission_granted",Toast.LENGTH_SHORT).show();
+
+        }
 
     }
 }
