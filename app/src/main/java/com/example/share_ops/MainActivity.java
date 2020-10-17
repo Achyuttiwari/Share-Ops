@@ -3,6 +3,7 @@ package com.example.share_ops;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat {
 
         if(requestCode == PERMISSION_REQUEST_INTERNET) {
             if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this,"Internet_permission_granted",Toast.LENGTH_SHORT).show();
 
             }
 
