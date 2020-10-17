@@ -73,4 +73,13 @@ public class MainActivity_sender extends AppCompatActivity{
         }
     }
 
+    public void startServer(View view){
+
+        Thread serverThread = new Thread(new ServerThread());
+        serverThread.start();
+        ipGenerator();
+    }
+
+
+
 }
