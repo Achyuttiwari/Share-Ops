@@ -49,7 +49,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat {
         }
     }
     private void requestInternetPermission() {
-        {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.INTERNET)) {
 
         }
 }
