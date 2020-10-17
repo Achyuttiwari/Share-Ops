@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.material.snackbar.Snackbar;
+
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat {
 
@@ -51,7 +53,16 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat {
     private void requestInternetPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.INTERNET)) {
-
+            Snackbar.make(mLayout, "Internet access is required to display the camera preview.",
+                    Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Request the permission
+                    ActivityCompat.requestPermissions(MainActivity.this,
+                            new String[]{Manifest.permission.INTERNET},
+                            PERMISSION_REQUEST_INTERNET);
+                }
+            }).show();
         }
 }
 }
