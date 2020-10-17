@@ -1,8 +1,10 @@
 package com.example.share_ops;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,5 +37,10 @@ public class FileChooser extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                String path = data.getStringExtra("path");
+                filePath.setText(path);
+                Log.e("data",path);
+        }
     }
 }
