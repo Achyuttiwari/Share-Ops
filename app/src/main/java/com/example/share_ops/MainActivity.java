@@ -1,5 +1,6 @@
 package com.example.share_ops;
 
+import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -13,8 +14,8 @@ import androidx.core.app.ActivityCompat;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat {
 
-        int PERMISSION_REQUEST_INTERNET = 0;
-        View mLayout;
+    int PERMISSION_REQUEST_INTERNET = 0;
+    View mLayout;
 
 
     @Override
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat {
     }
 
     public void onPermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET)
+                == PackageManager.PERMISSION_GRANTED) {
 
     }
 }
