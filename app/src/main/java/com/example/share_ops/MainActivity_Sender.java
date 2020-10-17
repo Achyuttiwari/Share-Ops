@@ -22,3 +22,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+public class MainActivity_sender extends AppCompatActivity{
+    ServerSocket serverSocket;
+    Socket sSocket;
+    int SERVERPORT = 2935;
+    Handler handler;
+
+}
