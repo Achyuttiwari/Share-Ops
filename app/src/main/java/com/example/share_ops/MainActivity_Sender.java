@@ -103,6 +103,11 @@ public class MainActivity_sender extends AppCompatActivity{
             e.printStackTrace();
         }
     }
+    String IPgen(){
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+        return ip;
+    }
 
 
 }
