@@ -189,4 +189,4 @@ public class MainActivity_sender extends AppCompatActivity{
         }
     }
 
-}
+}ā

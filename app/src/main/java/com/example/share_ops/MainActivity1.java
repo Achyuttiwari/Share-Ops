@@ -15,7 +15,7 @@ import androidx.core.app.ActivityCompat;
 import com.google.android.material.snackbar.Snackbar;
 
 
-public class MainActivity extends AppCompatActivity implements ActivityCompat {
+public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback  {
 
     int PERMISSION_REQUEST_INTERNET = 0;
     View mLayout;
