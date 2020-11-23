@@ -1,4 +1,4 @@
-package com.example.wifishareit;
+package com.example.share_ops;
 
 import android.Manifest;
 import android.content.Intent;
@@ -12,9 +12,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,6 +25,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 
 public class MainActivity_sender extends AppCompatActivity{
     ServerSocket serverSocket;
@@ -189,4 +197,4 @@ public class MainActivity_sender extends AppCompatActivity{
         }
     }
 
-}ā
+}

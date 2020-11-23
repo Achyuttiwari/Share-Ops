@@ -15,7 +15,8 @@ import androidx.core.app.ActivityCompat;
 import com.google.android.material.snackbar.Snackbar;
 
 
-public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback  {
+public class MainActivity1 extends AppCompatActivity
+        implements ActivityCompat.OnRequestPermissionsResultCallback  {
 
     int PERMISSION_REQUEST_INTERNET = 0;
     View mLayout;
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main1);
         onPermission();
     }
 
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 @Override
                 public void onClick(View view) {
                     // Request the permission
-                    ActivityCompat.requestPermissions(MainActivity.this,
+                    ActivityCompat.requestPermissions(MainActivity1.this,
                             new String[]{Manifest.permission.INTERNET},
                             PERMISSION_REQUEST_INTERNET);
                 }

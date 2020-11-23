@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#daf1f2"
-    tools:context="com.sa.share.MainActivity_receiver">
+    tools:context="com.example.share_ops.MainActivity_receiver">
 
     <EditText
         android:layout_width="match_parent"

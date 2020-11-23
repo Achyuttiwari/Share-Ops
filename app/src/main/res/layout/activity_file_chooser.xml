@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#daf1f2"
-    tools:context="com.sa.share.FileChooser">
+    tools:context="com.example.share_ops.FileChooser">
 
     <Button
         android:text="Permission for File Read"
@@ -34,7 +34,8 @@
         android:textAlignment="center"
         android:textColor="#ffff"
         android:background="@layout/mybutton"
-        />
+        tools:ignore="OnClick"
+        android:gravity="center_horizontal" />
 
     <TextView
         android:layout_width="match_parent"
@@ -55,6 +56,6 @@
         android:textSize="20sp"
         android:textColor="#ffff"
         android:background="@layout/mybutton"
-        />
+        tools:ignore="OnClick" />
 
 </RelativeLayout>
