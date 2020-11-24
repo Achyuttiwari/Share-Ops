@@ -31,7 +31,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-public class MainActivity_sender extends AppCompatActivity{
+public class MainActivity_Sender extends AppCompatActivity{
     ServerSocket serverSocket;
     Socket sSocket;
     int SERVERPORT = 2935;

@@ -39,7 +39,6 @@ public class MainActivity_receiver extends AppCompatActivity {
     boolean sending = false;
     Handler handler;
     IntentIntegrator qrScan;
-
     int PERMISSION_REQUEST_CODE = 1;
 
     TextView clientStatus;
