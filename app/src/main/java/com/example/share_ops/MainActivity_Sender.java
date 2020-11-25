@@ -220,8 +220,38 @@ public class MainActivity_Sender extends AppCompatActivity{
                     FileInputStream fis = new FileInputStream(myFile);
                     BufferedInputStream bis = new BufferedInputStream(fis);
                     bis.read(mybytearray,0,mybytearray.length);
-                    OutputStream os = client.getOutputStream();
-                    handler.post(new Runnable() {
+                    OutputStream os = sock.getOutputStream();
+
+
+                    os.write(mybytearray,0,mybytearray.length);
+
+                    os.flush();
+                    fis.close();
+                    bis.close();
+                    sock.close();
+                }
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } finally {
+                if (serverSocket != null) {
+                    try {
+                        serverSocket.close();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+   }
+    public class FileTxThread extends Thread {
+        Socket socket;
+
+        FileTxThread(Socket socket) {
+            this.socket = socket;
+        }
                         @Override
                         public void run() {
                             //Toast.makeText(MainActivity_sender.this,"Sending....",Toast.LENGTH_LONG).show();
