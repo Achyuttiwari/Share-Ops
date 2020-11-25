@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -202,8 +203,9 @@ public class MainActivity_Sender extends AppCompatActivity{
 
                 while (true) {
                     // LISTEN FOR INCOMING CLIENTS
-                    Socket client = serverSocket.accept();
-                    handler.post(new Runnable() {
+                    Socket sock = serverSocket.accept(); // blocks until connection opened
+                    Log.i("************", "Accepted connection : " + sock);
+                    MainActivity_Sender.this.runOnUiThread(new Runnable() { {
                         @Override
                         public void run() {
                             serverStatus.setText("Connected...");
