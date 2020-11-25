@@ -297,6 +297,8 @@ public class MainActivity_Sender extends AppCompatActivity{
                             }
                         }
     public static String getIPAddress(boolean useIPv4) {
+        try {
+
 
         }
     }
