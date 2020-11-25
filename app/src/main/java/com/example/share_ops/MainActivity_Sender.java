@@ -193,15 +193,11 @@ public class MainActivity_Sender extends AppCompatActivity{
 
     class ServerThread extends Thread {
 
-        public void run(){
-            try {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        listenText.setText("Listening on port : "+IP+":"+SERVERPORT);
-                    }
-                });
+        @Override
+        public void run() {
 
+
+            try {
                 serverSocket = new ServerSocket(SERVERPORT);
 
                 while (true) {
