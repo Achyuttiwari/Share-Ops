@@ -22,6 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity1"
+            android:theme="@style/AppTheme"></activity>
         <activity android:name=".MainActivity_Sender" />
         <activity android:name=".MainActivity_receiver" />
         <activity android:name=".FileChooser" />
