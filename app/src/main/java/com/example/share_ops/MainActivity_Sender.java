@@ -191,7 +191,7 @@ public class MainActivity_Sender extends AppCompatActivity{
         return bitmap;
     }
 
-    class ServerThread extends Thread {
+   public class ServerThread extends Thread {
 
         @Override
         public void run() {
