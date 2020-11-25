@@ -279,14 +279,24 @@ public class MainActivity_Sender extends AppCompatActivity{
                                                 sentMsg,
                                                 Toast.LENGTH_LONG).show();
                                     }
-                    });
-                    os.write(mybytearray,0,mybytearray.length);
-                    os.flush();
-                    client.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                                });
+                            }catch(FileNotFoundException e){
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                } catch(IOException e){
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                } finally{
+                                    try {
+                                        socket.close();
+                                    } catch (IOException e) {
+                                        // TODO Auto-generated catch block
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }
+
 
         }
     }
