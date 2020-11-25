@@ -254,9 +254,31 @@ public class MainActivity_Sender extends AppCompatActivity{
         }
                         @Override
                         public void run() {
-                            //Toast.makeText(MainActivity_sender.this,"Sending....",Toast.LENGTH_LONG).show();
-                            serverStatus.setText("sending File ...");
-                        }
+                            File file = new File(
+                                    Environment.getExternalStorageDirectory(),
+                                    filePath);
+
+                            byte[] bytes = new byte[(int) file.length()];
+                            BufferedInputStream bis;
+                            try {
+                                bis = new BufferedInputStream(new FileInputStream(file));
+                                bis.read(bytes, 0, bytes.length);
+
+                                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                                oos.writeObject(bytes);
+                                oos.flush();
+
+                                socket.close();
+
+                                final String sentMsg = "File sent to: " + socket.getInetAddress();
+                                MainActivity_Sender.this.runOnUiThread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(MainActivity_Sender.this,
+                                                sentMsg,
+                                                Toast.LENGTH_LONG).show();
+                                    }
                     });
                     os.write(mybytearray,0,mybytearray.length);
                     os.flush();
