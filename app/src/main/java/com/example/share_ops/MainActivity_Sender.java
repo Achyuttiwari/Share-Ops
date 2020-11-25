@@ -205,10 +205,13 @@ public class MainActivity_Sender extends AppCompatActivity{
                     // LISTEN FOR INCOMING CLIENTS
                     Socket sock = serverSocket.accept(); // blocks until connection opened
                     Log.i("************", "Accepted connection : " + sock);
-                    MainActivity_Sender.this.runOnUiThread(new Runnable() { {
+                    MainActivity_Sender.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            serverStatus.setText("Connected...");
+
+                            listenText.setText("Connected : IP"+IP+" port: "
+                                    + serverSocket.getLocalPort());
+                            serverStatus.setText("Connected");
                         }
                     });
 
