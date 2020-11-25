@@ -6,4 +6,5 @@
     <color name="black">#000000</color>
     <color name="QRCodeBlackColor">#000000</color>
     <color name="QRCodeWhiteColor">#ffffff</color>
+    <color name="white">#ffffff</color>
 </resources>
