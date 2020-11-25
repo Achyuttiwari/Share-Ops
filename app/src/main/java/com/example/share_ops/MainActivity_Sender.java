@@ -55,15 +55,15 @@ import java.util.Enumeration;
 import java.util.List;
 
 
-public class MainActivity_Sender extends AppCompatActivity{
+public class MainActivity_Sender extends AppCompatActivity {
     ServerSocket serverSocket;
     Socket sSocket;
     int SERVERPORT = 8080;
     Handler handler;
 
-    public final static int QRcodeWidth = 500 ;
+    public final static int QRcodeWidth = 500;
     int PERMISSION_REQUEST_CODE = 1;
-    Bitmap bitmap ;
+    Bitmap bitmap;
 
     TextView listenText;
     TextView serverStatus;
@@ -80,13 +80,13 @@ public class MainActivity_Sender extends AppCompatActivity{
         Intent fileIntent = getIntent();
         filePath = fileIntent.getStringExtra("path");
 
-        Toast.makeText(this,filePath,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, filePath, Toast.LENGTH_SHORT).show();
 
-        img_QR = (ImageView)findViewById(R.id.imageView_QR);
+        img_QR = (ImageView) findViewById(R.id.imageView_QR);
 
-        listenText = (TextView)findViewById(R.id.text_listen);
+        listenText = (TextView) findViewById(R.id.text_listen);
         listenText.setText("Not Listening");
-        serverStatus = (TextView)findViewById(R.id.text_serverStatus);
+        serverStatus = (TextView) findViewById(R.id.text_serverStatus);
         serverStatus.setText("Disconnected");
 
         handler = new Handler();
@@ -100,10 +100,11 @@ public class MainActivity_Sender extends AppCompatActivity{
                 // Permission granted.
                 //Toast.makeText(this,"permission WIFI_ACCESS",Toast.LENGTH_SHORT).show();
                 IP = IPgen();
-                Toast.makeText(this,IP,Toast.LENGTH_LONG).show();
+                Toast.makeText(this, IP, Toast.LENGTH_LONG).show();
             }
         }
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -117,14 +118,15 @@ public class MainActivity_Sender extends AppCompatActivity{
             }
         }
     }
-    public void startServer(View view){
+
+    public void startServer(View view) {
         ipGenerator();
         Thread serverThread = new Thread(new ServerThread());
         serverThread.start();
     }
 
 
-    public void ipGenerator(){
+    public void ipGenerator() {
         try {
             int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE);
             if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -132,21 +134,22 @@ public class MainActivity_Sender extends AppCompatActivity{
             } else {
                 //Toast.makeText(this,"permission for WIFI already granted",Toast.LENGTH_SHORT).show();
                 IP = IPgen();
-                Toast.makeText(this,String.valueOf(IP),Toast.LENGTH_LONG).show();
+                Toast.makeText(this, String.valueOf(IP), Toast.LENGTH_LONG).show();
             }
-            System.out.println("File path is :"+filePath);
-            String [] segments = filePath.split("/");
+            System.out.println("File path is :" + filePath);
+            String[] segments = filePath.split("/");
 
-            System.out.println("File Size in Byte /"+(new File(filePath).length()));
-            Toast.makeText(this,segments[(segments.length)-1],Toast.LENGTH_LONG).show();
-            bitmap = TextToImageEncode(IP+"/"+segments[(segments.length)-1]+"/"+(new File(filePath).length()));
+            System.out.println("File Size in Byte /" + (new File(filePath).length()));
+            Toast.makeText(this, segments[(segments.length) - 1], Toast.LENGTH_LONG).show();
+            bitmap = TextToImageEncode(IP + "/" + segments[(segments.length) - 1] + "/" + (new File(filePath).length()));
             img_QR.setImageBitmap(bitmap);
 
-        } catch ( WriterException e) {
+        } catch (WriterException e) {
             e.printStackTrace();
         }
     }
-    String IPgen(){
+
+    String IPgen() {
         WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
         int ipInt = wifiInfo.getIpAddress();
@@ -158,6 +161,7 @@ public class MainActivity_Sender extends AppCompatActivity{
         return "";
 
     }
+
     Bitmap TextToImageEncode(String Value) throws WriterException {
         BitMatrix bitMatrix;
         try {
@@ -183,7 +187,7 @@ public class MainActivity_Sender extends AppCompatActivity{
             for (int x = 0; x < bitMatrixWidth; x++) {
 
                 pixels[offset + x] = bitMatrix.get(x, y) ?
-                        getResources().getColor(R.color.QRCodeBlackColor):getResources().getColor(R.color.QRCodeWhiteColor);
+                        getResources().getColor(R.color.QRCodeBlackColor) : getResources().getColor(R.color.QRCodeWhiteColor);
             }
         }
         Bitmap bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444);
@@ -192,7 +196,7 @@ public class MainActivity_Sender extends AppCompatActivity{
         return bitmap;
     }
 
-   public class ServerThread extends Thread {
+    public class ServerThread extends Thread {
 
         @Override
         public void run() {
@@ -209,21 +213,21 @@ public class MainActivity_Sender extends AppCompatActivity{
                         @Override
                         public void run() {
 
-                            listenText.setText("Connected : IP"+IP+" port: "
+                            listenText.setText("Connected : IP" + IP + " port: "
                                     + serverSocket.getLocalPort());
                             serverStatus.setText("Connected");
                         }
                     });
 
-                    File myFile = new File (filePath);
-                    byte [] mybytearray  = new byte [(int)myFile.length()];
+                    File myFile = new File(filePath);
+                    byte[] mybytearray = new byte[(int) myFile.length()];
                     FileInputStream fis = new FileInputStream(myFile);
                     BufferedInputStream bis = new BufferedInputStream(fis);
-                    bis.read(mybytearray,0,mybytearray.length);
+                    bis.read(mybytearray, 0, mybytearray.length);
                     OutputStream os = sock.getOutputStream();
 
 
-                    os.write(mybytearray,0,mybytearray.length);
+                    os.write(mybytearray, 0, mybytearray.length);
 
                     os.flush();
                     fis.close();
@@ -245,57 +249,60 @@ public class MainActivity_Sender extends AppCompatActivity{
             }
         }
 
-   }
+    }
+
     public class FileTxThread extends Thread {
         Socket socket;
 
         FileTxThread(Socket socket) {
             this.socket = socket;
         }
-                        @Override
-                        public void run() {
-                            File file = new File(
-                                    Environment.getExternalStorageDirectory(),
-                                    filePath);
 
-                            byte[] bytes = new byte[(int) file.length()];
-                            BufferedInputStream bis;
-                            try {
-                                bis = new BufferedInputStream(new FileInputStream(file));
-                                bis.read(bytes, 0, bytes.length);
+        @Override
+        public void run() {
+            File file = new File(
+                    Environment.getExternalStorageDirectory(),
+                    filePath);
 
-                                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-                                oos.writeObject(bytes);
-                                oos.flush();
+            byte[] bytes = new byte[(int) file.length()];
+            BufferedInputStream bis;
+            try {
+                bis = new BufferedInputStream(new FileInputStream(file));
+                bis.read(bytes, 0, bytes.length);
 
-                                socket.close();
+                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                oos.writeObject(bytes);
+                oos.flush();
 
-                                final String sentMsg = "File sent to: " + socket.getInetAddress();
-                                MainActivity_Sender.this.runOnUiThread(new Runnable() {
+                socket.close();
 
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(MainActivity_Sender.this,
-                                                sentMsg,
-                                                Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            }catch(FileNotFoundException e){
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
-                                } catch(IOException e){
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
-                                } finally{
-                                    try {
-                                        socket.close();
-                                    } catch (IOException e) {
-                                        // TODO Auto-generated catch block
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }
-                        }
+                final String sentMsg = "File sent to: " + socket.getInetAddress();
+                MainActivity_Sender.this.runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity_Sender.this,
+                                sentMsg,
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } finally {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public static String getIPAddress(boolean useIPv4) {
         try {
             List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
@@ -305,19 +312,21 @@ public class MainActivity_Sender extends AppCompatActivity{
                     if (!addr.isLoopbackAddress()) {
                         String sAddr = addr.getHostAddress();
                         //boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr);
-                        boolean isIPv4 = sAddr.indexOf(':')<0;
+                        boolean isIPv4 = sAddr.indexOf(':') < 0;
                         if (useIPv4) {
                             if (isIPv4)
                                 return sAddr;
                         } else {
                             if (!isIPv4) {
                                 int delim = sAddr.indexOf('%'); // drop ip6 zone suffix
-                                return delim<0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
+                                return delim < 0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
                             }
                         }
                     }
-
-        }
+                }
+            }
+        } catch (Exception ignored) {
+        } // for now eat exceptions
+        return "";
     }
-
 }
