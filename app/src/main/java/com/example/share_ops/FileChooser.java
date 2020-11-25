@@ -29,6 +29,7 @@ import java.util.ArrayList;
 public class FileChooser extends AppCompatActivity {
     TextView filePath;
     int PERMISSION_REQUEST_CODE = 1;
+    ArrayList<MediaFile> files;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
