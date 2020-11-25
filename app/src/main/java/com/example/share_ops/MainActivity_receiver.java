@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.os.Handler;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
 import android.os.Bundle;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.EditText;
@@ -34,21 +37,25 @@ public class MainActivity_receiver extends AppCompatActivity {
 
     Socket clientSocket;
     String IP = "";
-    int SERVERPORT = 2935;
+    int SERVERPORT = 8080;
     boolean connected = false;
     boolean sending = false;
     Handler handler;
     IntentIntegrator qrScan;
     int PERMISSION_REQUEST_CODE = 1;
+    int PERMISSION_REQUEST_EXTERNAL = 2;
 
     TextView clientStatus;
     EditText serverIP;
+    private byte[] imageByte;
 
-    int filesize = 1024; // filesize temporary hardcoded
+    int filesize = 900000; // filesize temporary hardcoded
 
     long start = System.currentTimeMillis();
     int bytesRead;
+    File file;
     int current = 0;
+    Button rec_connect;
 
     String segments[];
     String fileName;
@@ -57,11 +64,25 @@ public class MainActivity_receiver extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_receiver);
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_EXTERNAL);
+        }
         handler = new Handler();
-
+        rec_connect = findViewById(R.id.button_connectClient);
+        rec_connect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                connectServer(v);
+            }
+        });
+        file = new File(Environment.getExternalStorageDirectory() + File.separator + "ShareFIle");
+        if (!file.isDirectory()) {
+            file.mkdir();
+        }
         qrScan = new IntentIntegrator(this);
-        serverIP = (EditText)findViewById(R.id.edit_serverIP);
-        clientStatus = (TextView)findViewById(R.id.text_clientStatus);
+        serverIP = (EditText) findViewById(R.id.edit_serverIP);
+        clientStatus = (TextView) findViewById(R.id.text_clientStatus);
     }
 
     @Override
@@ -70,7 +91,14 @@ public class MainActivity_receiver extends AppCompatActivity {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted.
-                Toast.makeText(this,"permission already granted",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "permission already granted", Toast.LENGTH_LONG).show();
+            }
+        }
+        if (requestCode == PERMISSION_REQUEST_EXTERNAL) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted.
+                Toast.makeText(this, "permission already granted", Toast.LENGTH_LONG).show();
+
             }
         }
     }
@@ -87,7 +115,7 @@ public class MainActivity_receiver extends AppCompatActivity {
                 //if qr contains data
                 try {
 
-                    Toast.makeText(this,result.getContents(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
                     segments = result.getContents().split("/");
                     IP = segments[0];
                     fileName = segments[1];
@@ -103,94 +131,100 @@ public class MainActivity_receiver extends AppCompatActivity {
     }
 
 
-
-    public void scanIP(View view){
+    public void scanIP(View view) {
 
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CODE);
         } else {
-            Toast.makeText(this,"permission already granted",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "permission already granted", Toast.LENGTH_LONG).show();
             qrScan.initiateScan();
 
         }
 
     }
 
-    public void connectServer(View view){
+    public void connectServer(View view) {
         //IP = serverIP.getText().toString();
         //clientSocket = new Socket(IP, SERVERPORT);
-        System.out.println("This is IP : "+IP);
-        if(IP.equals("0.0.0.0") || IP.equals("")){
+        Log.e("ip is this", "ip" + IP);
+        if (IP.equals("0.0.0.0") || IP.equals("")) {
             Toast.makeText(this, "Invalid Sender", Toast.LENGTH_SHORT).show();
             return;
         }
-        Thread clientThread = new Thread(new ClientThread());
+        Thread clientThread = new Thread(new ClientThread(IP, SERVERPORT));
         clientThread.start();
     }
 
-    class ClientThread implements Runnable{
-        public void run(){
-            //IP = serverIP.getText().toString();
+    private class ClientThread extends Thread {
+        String dstAddress;
+        int dstPort;
+
+        ClientThread(String address, int port) {
+            dstAddress = address;
+            dstPort = port;
+        }
+
+        @Override
+        public void run() {
+            Socket socket = null;
             try {
-                clientSocket = new Socket(MainActivity_receiver.this.IP, MainActivity_receiver.this.SERVERPORT);
-                connected = true;
+                socket = new Socket(dstAddress, dstPort);
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(connected) {
-                            clientStatus.setText("connected");
-                        }
-                    }
-                });
-
-                File ShareFile = new File(Environment.getExternalStorageDirectory()+File.separator+"ShareFile");
-
-                System.out.println(ShareFile.toString());
-
-                if(!ShareFile.exists() && !ShareFile.isDirectory())
-                {
-                    // create empty directory
-                    ShareFile.mkdirs();
-                }
-
-                System.out.println("Actual Location : "+new File(ShareFile,MainActivity_receiver.this.fileName).toString());
-
-                byte [] mybytearray  = new byte [MainActivity_receiver.this.filesize];
-                InputStream is = clientSocket.getInputStream();
-                FileOutputStream fos = new FileOutputStream(new File(ShareFile,MainActivity_receiver.this.fileName));
+                FileOutputStream fos = new FileOutputStream(new File(file, MainActivity_receiver.this.fileName));
+                byte[] mybytearray = new byte[filesize];
+                InputStream is = socket.getInputStream();
                 BufferedOutputStream bos = new BufferedOutputStream(fos);
-                bytesRead = is.read(mybytearray,0,mybytearray.length);
+                bytesRead = is.read(mybytearray, 0, mybytearray.length);
                 current = bytesRead;
-
                 do {
-                    bytesRead =is.read(mybytearray, current, (mybytearray.length-current));
-                    if(bytesRead > 0) {
-                        current += bytesRead;
-                    }
-                } while(bytesRead > 0);
+                    bytesRead =
+                            is.read(mybytearray, current, (mybytearray.length - current));
+                    if (bytesRead >= 0) current += bytesRead;
+                } while (bytesRead > -1);
 
-                bos.write(mybytearray, 0 , current);
+                bos.write(mybytearray, 0, current);
                 bos.flush();
                 long end = System.currentTimeMillis();
-                System.out.println(end-start);
+                Log.i(" end-start = ", String.valueOf(end - start));
                 bos.close();
-                clientSocket.close();
-                sending = true;
+                socket.close();
+                fos.close();
 
-                handler.post(new Runnable() {
+
+                MainActivity_receiver.this.runOnUiThread(new Runnable() {
+
                     @Override
                     public void run() {
-                        if(sending){
-                            clientStatus.setText("received");
-                        }
+                        Toast.makeText(MainActivity_receiver.this,
+                                "Finished",
+                                Toast.LENGTH_LONG).show();
                     }
                 });
             } catch (IOException e) {
                 e.printStackTrace();
+
+                final String eMsg = "Something wrong: " + e.getMessage();
+                MainActivity_receiver.this.runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity_receiver.this,
+                                eMsg,
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+
+            } finally {
+                if (socket != null) {
+                    try {
+                        socket.close();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }
-
-}
+        }

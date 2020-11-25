@@ -4,7 +4,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Environment;
+import android.os.Handler;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.Formatter;
@@ -17,24 +20,44 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.jaiselrahman.filepicker.model.MediaFile;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.NetworkInterface;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
+
 
 public class MainActivity_Sender extends AppCompatActivity{
     ServerSocket serverSocket;
     Socket sSocket;
-    int SERVERPORT = 2935;
+    int SERVERPORT = 8080;
     Handler handler;
 
     public final static int QRcodeWidth = 500 ;
@@ -80,12 +103,23 @@ public class MainActivity_Sender extends AppCompatActivity{
             }
         }
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
+        if (serverSocket != null) {
+            try {
+                serverSocket.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
     public void startServer(View view){
-
+        ipGenerator();
         Thread serverThread = new Thread(new ServerThread());
         serverThread.start();
-        ipGenerator();
     }
 
 
@@ -97,7 +131,7 @@ public class MainActivity_Sender extends AppCompatActivity{
             } else {
                 //Toast.makeText(this,"permission for WIFI already granted",Toast.LENGTH_SHORT).show();
                 IP = IPgen();
-                Toast.makeText(this,IP,Toast.LENGTH_LONG).show();
+                Toast.makeText(this,String.valueOf(IP),Toast.LENGTH_LONG).show();
             }
             System.out.println("File path is :"+filePath);
             String [] segments = filePath.split("/");
@@ -107,16 +141,23 @@ public class MainActivity_Sender extends AppCompatActivity{
             bitmap = TextToImageEncode(IP+"/"+segments[(segments.length)-1]+"/"+(new File(filePath).length()));
             img_QR.setImageBitmap(bitmap);
 
-        } catch ( Exception e) {
+        } catch ( WriterException e) {
             e.printStackTrace();
         }
     }
     String IPgen(){
-        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-        return ip;
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        int ipInt = wifiInfo.getIpAddress();
+        try {
+            return InetAddress.getByAddress(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(ipInt).array()).getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return "";
+
     }
-    Bitmap TextToImageEncode(String Value) throws Exception {
+    Bitmap TextToImageEncode(String Value) throws WriterException {
         BitMatrix bitMatrix;
         try {
             bitMatrix = new MultiFormatWriter().encode(

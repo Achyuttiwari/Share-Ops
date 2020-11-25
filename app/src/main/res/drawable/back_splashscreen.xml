@@ -4,8 +4,11 @@
     <item android:drawable="@color/white"/>
 
     <item>
-        <bitmap android:src="@drawable/share"
-            android:gravity="center"/>
+        <bitmap
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:src="@drawable/share" />
     </item>
 
 
