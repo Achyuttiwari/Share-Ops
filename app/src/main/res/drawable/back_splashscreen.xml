@@ -3,5 +3,13 @@
 
     <item android:drawable="@color/white"/>
 
+    <item>
+        <bitmap android:src="@drawable/share"
+            android:gravity="center"/>
+    </item>
+
+
+
+
 
 </layer-list>
