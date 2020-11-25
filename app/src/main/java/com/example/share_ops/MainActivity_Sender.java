@@ -191,7 +191,7 @@ public class MainActivity_Sender extends AppCompatActivity{
         return bitmap;
     }
 
-    class ServerThread implements Runnable{
+    class ServerThread extends Thread {
 
         public void run(){
             try {
