@@ -55,7 +55,15 @@ public class FileChooser extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
-                String path = data.getStringExtra("path");
+                ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FilePickerActivity.MEDIA_FILES);
+                Log.e("size","size is"+String.valueOf(files.size())+"path"+files.get(0).getPath());
+
+
+
+
+
+
+                String path = files.get(0).getPath();
                 filePath.setText(path);
                 Log.e("data", path);
             } else {
