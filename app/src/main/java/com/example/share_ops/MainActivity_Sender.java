@@ -134,13 +134,13 @@ public class MainActivity_Sender extends AppCompatActivity {
             } else {
                 //Toast.makeText(this,"permission for WIFI already granted",Toast.LENGTH_SHORT).show();
                 IP = IPgen();
-                Toast.makeText(this, String.valueOf(IP), Toast.LENGTH_LONG).show();
+               // Toast.makeText(this, String.valueOf(IP), Toast.LENGTH_LONG).show();
             }
             System.out.println("File path is :" + filePath);
             String[] segments = filePath.split("/");
 
             System.out.println("File Size in Byte /" + (new File(filePath).length()));
-            Toast.makeText(this, segments[(segments.length) - 1], Toast.LENGTH_LONG).show();
+           // Toast.makeText(this, segments[(segments.length) - 1], Toast.LENGTH_LONG).show();
             bitmap = TextToImageEncode(IP + "/" + segments[(segments.length) - 1] + "/" + (new File(filePath).length()));
             img_QR.setImageBitmap(bitmap);
 
