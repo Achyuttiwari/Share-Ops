@@ -85,9 +85,9 @@ public class MainActivity_Sender extends AppCompatActivity {
         img_QR = (ImageView) findViewById(R.id.imageView_QR);
 
         listenText = (TextView) findViewById(R.id.text_listen);
-        listenText.setText("Not Listening");
+      //  listenText.setText("Not Listening");
         serverStatus = (TextView) findViewById(R.id.text_serverStatus);
-        serverStatus.setText("Disconnected");
+        //serverStatus.setText("Disconnected");
 
         handler = new Handler();
     }
